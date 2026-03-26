@@ -1,9 +1,23 @@
+const { id } = require('zod/locales');
 const { Vehiculo } = require('../models');
 
 // Obtener todos los vehículos activos
 exports.listarVehiculos = async (req, res) => {
     try {
         const vehiculos = await Vehiculo.findAll({ where: { activo: true } });
+        res.json(vehiculos);
+    } catch (error) {
+        res.status(500).json({ error: "Error al obtener vehículos", detalle: error.message });
+    }
+};
+
+exports.listarVehiculosporID = async (req, res) => {
+    const userid = req.params.id
+    try {
+        const vehiculos = await Vehiculo.findOne({ where: { 
+            activo: true,
+            id: userid 
+        } });
         res.json(vehiculos);
     } catch (error) {
         res.status(500).json({ error: "Error al obtener vehículos", detalle: error.message });
